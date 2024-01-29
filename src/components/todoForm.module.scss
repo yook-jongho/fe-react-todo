@@ -10,7 +10,13 @@
   width: 80%;
   height: 40px;
   padding-left: 15px;
+  border: none;
+  border-bottom: 1px solid #e0ebd5;
   font-size: large;
+  outline: none;
+  &:focus {
+    border-bottom: 1px solid #5d9033;
+  }
 }
 
 .submit {

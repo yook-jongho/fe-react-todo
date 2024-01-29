@@ -8,7 +8,9 @@ function App() {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>My Todo App</header>
+      <header className={styles.header}>
+        나<sub>만의</sub> 작<sub>은</sub> 스<sub>케줄러</sub>
+      </header>
       <main className={styles.main}>
         <TodoForm setTodoList={setTodoList} />
         <TodoList todoList={todoList} setTodoList={setTodoList} />
