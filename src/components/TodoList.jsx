@@ -1,20 +1,19 @@
 import styles from "./todoList.module.scss";
 
-export function TodoList() {
+export function TodoList({ todoList }) {
   return (
     <ul className={styles.todoList}>
-      <TodoItem />
-      <TodoItem />
-      <TodoItem />
-      <TodoItem />
+      {todoList.map((todoItem, idx) => (
+        <TodoItem key={idx} todoText={todoItem} />
+      ))}
     </ul>
   );
 }
 
-function TodoItem() {
+function TodoItem({ todoText }) {
   return (
     <li className={styles.todoItem}>
-      <p className={styles.todoContent}>오늘도 개발자가 안된다고 말했다.</p>
+      <p className={styles.todoContent}>{todoText}</p>
       <button className={styles.deleteTodo}>삭제</button>
     </li>
   );
