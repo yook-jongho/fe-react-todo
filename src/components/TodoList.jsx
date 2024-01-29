@@ -5,29 +5,30 @@ export function TodoList({ todoList, setTodoList }) {
   return (
     <ul className={styles.todoList}>
       {todoList.map((todoItem, idx) => (
-        <TodoItem key={idx} idx={idx} todoText={todoItem} setTodoList={setTodoList} />
+        <TodoItem key={idx} idx={idx} todoItem={todoItem} setTodoList={setTodoList} />
       ))}
     </ul>
   );
 }
 
-function TodoItem({ todoText, setTodoList, idx }) {
+function TodoItem({ todoItem: { text, complete }, setTodoList, idx }) {
+  const [isComplete, setIsComplete] = useState(complete);
+
   const deleteTodo = () => {
     setTodoList((prev) => prev.filter((_, index) => index !== idx));
   };
 
-  const [complete, setComplete] = useState(false);
-  const completeTodo = ({ target }) => {
-    setComplete((prev) => !prev);
+  const completeTodo = () => {
+    setIsComplete((prev) => !prev);
   };
 
   return (
     <li className={styles.todoItem}>
       <p
-        className={`${styles.todoContent} ${complete ? styles.complete : ""}`}
+        className={`${styles.todoContent} ${isComplete ? styles.complete : ""}`}
         onClick={completeTodo}
       >
-        {todoText}
+        {text}
       </p>
       <button className={styles.deleteTodo} onClick={deleteTodo}>
         삭제
