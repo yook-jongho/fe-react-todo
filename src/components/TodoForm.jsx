@@ -12,7 +12,8 @@ export function TodoForm({ setTodoList }) {
     setTodoText(value);
   };
 
-  const submitTodo = () => {
+  const submitTodo = (event) => {
+    event.preventDefault();
     setTodoText("");
     if (!todoText.trim()) {
       return;
@@ -21,7 +22,7 @@ export function TodoForm({ setTodoList }) {
   };
 
   return (
-    <form action="" className={styles.todoForm}>
+    <form onSubmit={submitTodo} className={styles.todoForm}>
       <input
         type="text"
         className={styles.todo}
@@ -29,7 +30,7 @@ export function TodoForm({ setTodoList }) {
         onChange={handleInputChange}
         value={todoText}
       />
-      <button type="button" onClick={submitTodo} className={styles.submit}>
+      <button type="submit" className={styles.submit}>
         등록
       </button>
     </form>
