@@ -11,7 +11,7 @@ function App() {
       <header className={styles.header}>My Todo App</header>
       <main className={styles.main}>
         <TodoForm setTodoList={setTodoList} />
-        <TodoList todoList={todoList} />
+        <TodoList todoList={todoList} setTodoList={setTodoList} />
       </main>
     </div>
   );
