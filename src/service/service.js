@@ -8,7 +8,6 @@ export const getTodoList = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         return data;
       });
     return getData;
