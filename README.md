@@ -1,3 +1,7 @@
+# Structure
+
+![](https://github.com/Sang-minKIM/fe-react-todo/assets/87116017/2ccf25f5-fe1a-4a9e-915b-29e1bf64c9c1)
+
 # 💻 Tech Stack
 
 - javascript
