@@ -1,0 +1,23 @@
+@import "../styles/variables.scss";
+
+.todoList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+}
+
+.todoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #e0ebd5;
+}
+
+.deleteTodo {
+  @include btn(12%, 30px, #6191bf, regular);
+}

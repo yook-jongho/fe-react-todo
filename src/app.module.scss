@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.header {
+  height: 100px;
+  font-size: 50px;
+}
+
+.main {
+  width: 100%;
+  height: calc(100vh - 100px);
+}
