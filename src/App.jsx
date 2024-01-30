@@ -7,11 +7,11 @@ const BASE_URL = "http://localhost:3000/todolist";
 
 const initialState = {
   loading: false,
-  error: false,
-  success: false,
+  error: null,
+  data: null,
 };
 
-const action = {
+const actionType = {
   loading: "LOADING",
   error: "ERROR",
   success: "SUCCESS",
@@ -20,23 +20,21 @@ const action = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "LOADING":
-      return { loading: true, error: false, success: false };
+      return { loading: true, error: null, data: null };
     case "ERROR":
-      return { loading: false, error: true, success: false };
+      return { loading: false, error: action.error, data: null };
     case "SUCCESS":
-      return { loading: false, error: false, success: true };
+      return { loading: false, error: null, data: action.data };
     default:
       throw new Error(`해당하는 action type이 없습니다. ${action.type}`);
   }
 };
 
 function App() {
-  const [todoList, setTodoList] = useState([]);
   const [promiseState, dispatch] = useReducer(reducer, initialState);
-  const { loading, error, success } = promiseState;
 
   const fetchTodo = () => {
-    dispatch({ type: action.loading });
+    dispatch({ type: actionType.loading });
     fetch(BASE_URL)
       .then((response) => {
         if (!response.ok) {
@@ -45,12 +43,11 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        setTodoList(data);
-        dispatch({ type: action.success });
+        dispatch({ type: actionType.success, data });
       })
       .catch((error) => {
-        dispatch({ type: action.error });
-        console.log(error);
+        dispatch({ type: actionType.error, error });
+        console.error(error);
       });
   };
 
@@ -58,25 +55,25 @@ function App() {
     fetchTodo();
   }, []);
 
+  const { loading, error, data: todoList } = promiseState;
+
   if (loading) {
     return <div>로딩중..</div>;
   }
-  if (error) {
+  if (error || !todoList) {
     return <div>에러가 발생했습니다</div>;
   }
-  if (success) {
-    return (
-      <div className={styles.container}>
-        <header className={styles.header}>
-          나<sub>만의</sub> 작<sub>은</sub> 스<sub>케줄러</sub>
-        </header>
-        <main className={styles.main}>
-          <TodoForm setTodoList={setTodoList} />
-          <TodoList todoList={todoList} setTodoList={setTodoList} />
-        </main>
-      </div>
-    );
-  }
+  return (
+    <div className={styles.container}>
+      <header className={styles.header}>
+        나<sub>만의</sub> 작<sub>은</sub> 스<sub>케줄러</sub>
+      </header>
+      <main className={styles.main}>
+        <TodoForm />
+        <TodoList todoList={todoList} />
+      </main>
+    </div>
+  );
 }
 
 export default App;
