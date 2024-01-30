@@ -1,59 +1,17 @@
 import { TodoForm } from "./components/TodoForm";
 import { TodoList } from "./components/TodoList";
 import styles from "./app.module.scss";
-import { useEffect, useReducer, useState } from "react";
+import { useAsync } from "./hooks/useAsync";
 
 const BASE_URL = "http://localhost:3000/todolist";
 
-const initialState = {
-  loading: false,
-  error: null,
-  data: null,
-};
-
-const actionType = {
-  loading: "LOADING",
-  error: "ERROR",
-  success: "SUCCESS",
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "LOADING":
-      return { loading: true, error: null, data: null };
-    case "ERROR":
-      return { loading: false, error: action.error, data: null };
-    case "SUCCESS":
-      return { loading: false, error: null, data: action.data };
-    default:
-      throw new Error(`해당하는 action type이 없습니다. ${action.type}`);
-  }
+const getTodo = async () => {
+  const response = await fetch(BASE_URL);
+  return response;
 };
 
 function App() {
-  const [promiseState, dispatch] = useReducer(reducer, initialState);
-
-  const fetchTodo = () => {
-    dispatch({ type: actionType.loading });
-    fetch(BASE_URL)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("GET 요청 실패");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        dispatch({ type: actionType.success, data });
-      })
-      .catch((error) => {
-        dispatch({ type: actionType.error, error });
-        console.error(error);
-      });
-  };
-
-  useEffect(() => {
-    fetchTodo();
-  }, []);
+  const [promiseState, refetchTodo] = useAsync(getTodo);
 
   const { loading, error, data: todoList } = promiseState;
 
