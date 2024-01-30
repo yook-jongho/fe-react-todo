@@ -1,7 +1,7 @@
 import { TodoForm } from "./components/TodoForm";
 import { TodoList } from "./components/TodoList";
 import styles from "./app.module.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 const BASE_URL = "http://localhost:3000/todolist";
 
@@ -11,12 +11,32 @@ const initialState = {
   success: false,
 };
 
+const action = {
+  loading: "LOADING",
+  error: "ERROR",
+  success: "SUCCESS",
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "LOADING":
+      return { loading: true, error: false, success: false };
+    case "ERROR":
+      return { loading: false, error: true, success: false };
+    case "SUCCESS":
+      return { loading: false, error: false, success: true };
+    default:
+      throw new Error(`해당하는 action type이 없습니다. ${action.type}`);
+  }
+};
+
 function App() {
   const [todoList, setTodoList] = useState([]);
-  const [promiseState, setPromiseState] = useState(initialState);
+  const [promiseState, dispatch] = useReducer(reducer, initialState);
+  const { loading, error, success } = promiseState;
 
   const fetchTodo = () => {
-    setPromiseState({ ...initialState, loading: true });
+    dispatch({ type: action.loading });
     fetch(BASE_URL)
       .then((response) => {
         if (!response.ok) {
@@ -26,11 +46,10 @@ function App() {
       })
       .then((data) => {
         setTodoList(data);
-        setPromiseState({ ...initialState, success: true });
+        dispatch({ type: action.success });
       })
       .catch((error) => {
-        setPromiseState(state.error);
-        setPromiseState({ ...initialState, error: true });
+        dispatch({ type: action.error });
         console.log(error);
       });
   };
@@ -39,13 +58,13 @@ function App() {
     fetchTodo();
   }, []);
 
-  if (promiseState.loading) {
+  if (loading) {
     return <div>로딩중..</div>;
   }
-  if (promiseState.error) {
+  if (error) {
     return <div>에러가 발생했습니다</div>;
   }
-  if (promiseState.success) {
+  if (success) {
     return (
       <div className={styles.container}>
         <header className={styles.header}>
