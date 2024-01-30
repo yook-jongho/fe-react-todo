@@ -5,18 +5,18 @@ import { useEffect, useState } from "react";
 
 const BASE_URL = "http://localhost:3000/todolist";
 
-const state = {
-  loading: "loading",
-  error: "error",
-  success: "success",
+const initialState = {
+  loading: false,
+  error: false,
+  success: false,
 };
 
 function App() {
   const [todoList, setTodoList] = useState([]);
-  const [promiseState, setPromiseState] = useState(state.loading);
+  const [promiseState, setPromiseState] = useState(initialState);
 
   const fetchTodo = () => {
-    setPromiseState(state.loading);
+    setPromiseState({ ...initialState, loading: true });
     fetch(BASE_URL)
       .then((response) => {
         if (!response.ok) {
@@ -26,10 +26,11 @@ function App() {
       })
       .then((data) => {
         setTodoList(data);
-        setPromiseState(state.success);
+        setPromiseState({ ...initialState, success: true });
       })
       .catch((error) => {
         setPromiseState(state.error);
+        setPromiseState({ ...initialState, error: true });
         console.log(error);
       });
   };
@@ -38,13 +39,13 @@ function App() {
     fetchTodo();
   }, []);
 
-  if (promiseState == "loading") {
+  if (promiseState.loading) {
     return <div>로딩중..</div>;
   }
-  if (promiseState == "error") {
+  if (promiseState.error) {
     return <div>에러가 발생했습니다</div>;
   }
-  if (promiseState == "success") {
+  if (promiseState.success) {
     return (
       <div className={styles.container}>
         <header className={styles.header}>
