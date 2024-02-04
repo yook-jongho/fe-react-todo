@@ -1,17 +1,24 @@
 const BASE_URL = "http://localhost:3000/todolist";
 
-export const getTodoList = () => {
-  try {
-    const getData = fetch(BASE_URL)
-      .then((response) => {
-        if (!response.ok) throw new Error("GET 요청 실패");
-        return response.json();
-      })
-      .then((data) => {
-        return data;
-      });
-    return getData;
-  } catch (e) {
-    console.error(e);
-  }
+export const getTodo = async () => {
+    const response = await fetch(BASE_URL);
+    return response;
+};
+
+export const postTodo = async (data) => {
+    const response = await fetch(BASE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+    console.log(response);
+    return response;
+};
+
+export const deleteTodo = async (id) => {
+    const response = await fetch(BASE_URL, {
+        method: "DELETE",
+        body: JSON.stringify(id),
+    });
+    return response;
 };
